@@ -14,7 +14,7 @@ class Park extends DataObject implements JsonSerializable
         'Latitude' => 'Decimal(9,6)',
         'Longitude' => 'Decimal(9,6)',
         'Notes' => 'Text',
-        'Provider' => "Enum(array('Wellington City Council', 'Palmerston North City Council))",
+        'Provider' => "Enum(array('Wellington City Council', 'Palmerston North City Council'))",
         'ProviderCode' => 'Varchar(100)',
         'GeoJson' => 'Text',
         'FeatureOnOffLeash' => "Enum(array('On-leash', 'Off-leash'), 'On-leash')",
