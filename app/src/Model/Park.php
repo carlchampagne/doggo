@@ -4,6 +4,7 @@ namespace Doggo\Model;
 
 use JsonSerializable;
 use SilverStripe\ORM\DataObject;
+use Silverstripe\Assets\Image;
 
 class Park extends DataObject implements JsonSerializable
 {
@@ -19,6 +20,10 @@ class Park extends DataObject implements JsonSerializable
         'GeoJson' => 'Text',
         'FeatureOnOffLeash' => "Enum(array('On-leash', 'Off-leash'), 'On-leash')",
         'IsToPurge' => 'Boolean',
+    ];
+
+    private static $has_one = [
+        'Photo' => Image::class
     ];
 
     private static $summary_fields = [
@@ -47,6 +52,15 @@ class Park extends DataObject implements JsonSerializable
         return $validate;
     }
 
+    public function thumbnail()
+    {
+        //echo '<pre>';
+        //print_r($this->Photo);
+        //exit();
+        //return '<img src="' . $this->Photo->FitMax(400,400)  . '" alt="'. $this->Photo->Title .'" />';
+        return $this->Photo->FitMax(400,400) . '';
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -59,6 +73,7 @@ class Park extends DataObject implements JsonSerializable
             'ProviderCode' => $this->ProviderCode,
             'GeoJson' => $this->GeoJson,
             'FeatureOnOffLeash' => $this->FeatureOnOffLeash,
+            'Photo' => $this->thumbnail(),
             'LastEdited' => $this->LastEdited,
             'Created' => $this->Created,
         ];

@@ -6,14 +6,21 @@ use Doggo\Model\Park;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
+use Silverstripe\Assets\Image;
 
-class ParkController extends Controller 
+class ParkController extends Controller
 {
     private static $allowed_actions = [
         'index',
+        'upload'
     ];
 
-    public function index(HTTPRequest $request) 
+    private $valid_types = [
+        'image/jpeg',
+        'image/png'
+    ];
+
+    public function index(HTTPRequest $request)
     {
         if (!$request->isGET()) {
             return $this->json(['error' => 'Method not allowed'], 405);
@@ -33,6 +40,42 @@ class ParkController extends Controller
         }
 
         return $this->json($park);
+    }
+
+    public function upload(HTTPRequest $request) {
+        if (!$request->isPOST()) {
+            return $this->json(['error' => 'Method not allowed'], 405);
+        }
+
+        $id = $request->param('ID');
+
+        if (empty($id)) {
+            return $this->json(['error' => 'Park does not exist'], 405);
+        }
+
+        $park = Park::get_by_id($id);
+
+        if (!$park) {
+            return $this->json(['error' => 'Park does not exist'], 405);
+        }
+
+        $image = $request->postVar('image');
+        if (!in_array($image['type'], $this->valid_types)) {
+            return $this->json(['error' => 'File type not allowed'], 405);
+        }
+
+        $park->getField('Photo')->delete();
+
+        $filedata = file_get_contents($image['tmp_name']);
+        $filename = 'park/' . $id . '/' . $image['name'];
+        $photo = Image::create();
+        $photo->setFromString($filedata, $filename);
+        $photo->write();
+
+        $park->setField('Photo', $photo);
+        $park->write();
+
+        return $this->json($photo->FitMax(400, 400)->getURL());
     }
 
     /**
