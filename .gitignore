@@ -24,6 +24,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/app/Task/FetchPNCCParksTask.php
 /public/carl-test.php
-/public/assets/park/

@@ -50,11 +50,8 @@ export default {
           axios.post('api/v1/parks/'+this.park.ID+'/upload', fd)
             .then(function (res) {
               if (res.status == 200) {
-                console.log(parkPhoto);
                 parkPhoto.firstChild.firstChild.setAttribute('src', res.data);
               }
-
-            console.log(res);
           });
         }
         else {

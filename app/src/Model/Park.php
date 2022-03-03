@@ -54,11 +54,7 @@ class Park extends DataObject implements JsonSerializable
 
     public function thumbnail()
     {
-        //echo '<pre>';
-        //print_r($this->Photo);
-        //exit();
-        //return '<img src="' . $this->Photo->FitMax(400,400)  . '" alt="'. $this->Photo->Title .'" />';
-        return $this->Photo->FitMax(400,400) . '';
+        return ($this->Photo->URL ? $this->Photo->FitMax(400,400) . '' : '<img src="/blank.jpg" />');
     }
 
     public function jsonSerialize()

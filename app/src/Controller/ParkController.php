@@ -64,7 +64,8 @@ class ParkController extends Controller
             return $this->json(['error' => 'File type not allowed'], 405);
         }
 
-        $park->getField('Photo')->delete();
+        if (!empty($park->getField('Photo')->exists()))
+            $park->getField('Photo')->delete();
 
         $filedata = file_get_contents($image['tmp_name']);
         $filename = 'park/' . $id . '/' . $image['name'];
