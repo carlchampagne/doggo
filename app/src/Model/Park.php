@@ -19,6 +19,7 @@ class Park extends DataObject implements JsonSerializable
         'ProviderCode' => 'Varchar(100)',
         'GeoJson' => 'Text',
         'FeatureOnOffLeash' => "Enum(array('On-leash', 'Off-leash'), 'On-leash')",
+        'UnderModeration' => 'Boolean',
         'IsToPurge' => 'Boolean',
     ];
 
@@ -27,6 +28,7 @@ class Park extends DataObject implements JsonSerializable
     ];
 
     private static $summary_fields = [
+        'Photo.StripThumbnail' => 'Photo',
         'Title' => 'Title',
     ];
 
@@ -54,7 +56,7 @@ class Park extends DataObject implements JsonSerializable
 
     public function thumbnail()
     {
-        return ($this->Photo->URL ? $this->Photo->FitMax(400,400) . '' : '<img src="/blank.jpg" />');
+        return ($this->Photo->URL && !$this->UnderModeration ? $this->Photo->FitMax(400,400) . '' : '<img src="/blank.jpg" />');
     }
 
     public function jsonSerialize()

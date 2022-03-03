@@ -74,6 +74,7 @@ class ParkController extends Controller
         $photo->write();
 
         $park->setField('Photo', $photo);
+        $park->setField('UnderModeration', true);
         $park->write();
 
         return $this->json($photo->FitMax(400, 400)->getURL());
